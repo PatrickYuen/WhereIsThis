@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' http://* 'unsafe-inline'; script-src 'self' http://* 'unsafe-inline' 'unsafe-eval'" /><html>
+  <head>
+    <style>
+      #map {
+        width: 90vh;
+        height: 90vh;
+        background-color: grey;
+      }
+    </style>
+	<!-- Using JQuery -->
+	<script src="js/jquery-3.1.1.min.js"></script>
+		
+	<!-- Google Maps -->
+	<script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBUK7HPpjNepqxtKAGLA0wPRk14NE0nZgQ&callback=initMap">
+    </script>
+	
+	<!-- map -->
+	<script src="js/map.js"></script>
+  </head>
+  
+  <body>
+    <h3>Google Maps Demo</h3>
+    <div id="map"></div>
+  </body>
+  
+</html>
