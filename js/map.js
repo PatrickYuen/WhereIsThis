@@ -17,11 +17,7 @@ function initMap() {
 	}
 }
 
-//Create Popups
-// Add bubble to the top of the page.
-var bubbleDOM = document.createElement('div');
-bubbleDOM.setAttribute('class', 'selection_bubble');
-document.body.appendChild(bubbleDOM);
+//======================================================================================================
 
 var mouseX = 0;
 var mouseY = 0;
@@ -32,27 +28,56 @@ document.oncontextmenu = function(e) {
     mouseY = e.pageY;
 };
 
-//Message Passing
+//Message Passing from Background
 chrome.extension.onMessage.addListener(
-	function(request, sender, sendResponse) {
+	function(request, sender, sendResponse) {		
+		onRenderMap(request.selectionText);
 
-		//Render Map at that location
-		renderBubble(mouseX, mouseY, request.selectionText);
-		
 		sendResponse({});
 	}
 );
 
-// Close the bubble when we mouse off on the screen.
-//document.addEventListener('mousedown', function (e) {
-//  bubbleDOM.style.visibility = 'hidden';
-//}, false);
+// Unique ID to differentiate this content script from the rest of the web. 
+// or use the extension id from @@__extension_id__, I recall there was a bug, haven't
+// checked if it got resolved though. 
+var UNIQUE_MAP_VIEWER_ID = 'whereisthis_iframe'; 
+var latitude = -1;
+var longitude = -1;
 
-// Move that bubble to the appropriate location.
-function renderBubble(mouseX, mouseY, selection) {
-	bubbleDOM.innerHTML = selection;
-	bubbleDOM.style.top = mouseY + 'px';
-	bubbleDOM.style.left = mouseX + 'px';
-	bubbleDOM.style.visibility = 'visible';
-	console.log(document.body);
+//Here is where you want to render a latitude and longitude. We create an iframe so we
+//we can inject it. We just want to maintain a single instance of it though.
+function onRenderMap(selectedText) {
+  var mapViewerDOM = document.getElementById(UNIQUE_MAP_VIEWER_ID);
+  if (mapViewerDOM) {
+     mapViewerDOM.parentNode.removeChild(mapViewerDOM);
+  }
+
+  mapViewerDOM = document.createElement('iframe');
+  mapViewerDOM.setAttribute('id', UNIQUE_MAP_VIEWER_ID);
+  mapViewerDOM.setAttribute('src', chrome.extension.getURL('map_viewer.html'));
+  mapViewerDOM.setAttribute('frameBorder', '0');
+  mapViewerDOM.setAttribute('width', '99.90%');
+  mapViewerDOM.setAttribute('height', '100%');
+  mapViewerDOM.setAttribute('style', 'position: absolute;' +
+							'top: ' + mouseY + 'px;' +
+							'left: ' + mouseX + 'px;' +
+							'width: 40vh;' +
+							'height: 40vh;');
+  //TODO: Fix positioning
+  
+  //Message Posting to IFrame
+  mapViewerDOM.onload = function(e) {
+	mapViewerDOM.contentWindow.postMessage(
+	{ "selectedText": selectedText, "mouseX":mouseX, "mouseY":mouseY }, "*");
+  }
+  
+  document.body.appendChild(mapViewerDOM);
 }
+
+// Close the bubble when we click on the screen.
+document.addEventListener('mousedown', function (e) {
+	var mapViewerDOM = document.getElementById(UNIQUE_MAP_VIEWER_ID);
+	if (mapViewerDOM) {
+		mapViewerDOM.parentNode.removeChild(mapViewerDOM);
+	}
+}, false);
