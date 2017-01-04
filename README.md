@@ -12,7 +12,7 @@ Workflow:
 My exploration in google chrome extensions + google maps api
 
 In Progress: 
-Better Popup positioning and style //Bug with scrollbar during hidden
+Better Popup positioning and style
 
 tooltips with interesting info
 

@@ -49,5 +49,6 @@
 	width: 90vh;
 	border-style: solid;
 	border-color: black;
+	overflow:hidden;
 	visibility: hidden;
 }
