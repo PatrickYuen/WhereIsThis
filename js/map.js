@@ -63,8 +63,7 @@ function onRenderMap(selectedText) {
 							'left: ' + mouseX + 'px;' +
 							'width: 40vh;' +
 							'height: 40vh;');
-  //TODO: Fix positioning
-  
+
   //Message Posting to IFrame
   mapViewerDOM.onload = function(e) {
 	mapViewerDOM.contentWindow.postMessage(
@@ -74,6 +73,7 @@ function onRenderMap(selectedText) {
   document.body.appendChild(mapViewerDOM);
 }
 
+//TODO: Just hide map to make it more lightweight?
 // Close the bubble when we click on the screen.
 document.addEventListener('mousedown', function (e) {
 	var mapViewerDOM = document.getElementById(UNIQUE_MAP_VIEWER_ID);
