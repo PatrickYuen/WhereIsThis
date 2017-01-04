@@ -62,7 +62,8 @@ function onRenderMap(selectedText) {
 							'top: ' + mouseY + 'px;' +
 							'left: ' + mouseX + 'px;' +
 							'width: 40vh;' +
-							'height: 40vh;');
+							'height: 40vh;' +
+							'overflow: hidden; z-index: 99999');
 
   //Message Posting to IFrame
   mapViewerDOM.onload = function(e) {

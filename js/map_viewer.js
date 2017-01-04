@@ -25,9 +25,8 @@ window.addEventListener('message', function(e) {
 			cache: true,
             success: function (result) {
 				if(result.results.length == 1) {
-					console.log(result.results[0].geometry.location.lat);
-					console.log(result.results[0].geometry.location.lng);
-					
+					console.log("Found a place!");
+
 					var mapDOM = document.getElementById('map_canvas');
 		
 					var currPos = result.results[0].geometry.location;
@@ -43,6 +42,11 @@ window.addEventListener('message', function(e) {
 					//Set window size
 					mapDOM.style.width = "80vh";
 					mapDOM.style.height = "80vw";
+					
+					mapDOM.style.position = "absolute";
+				} else {
+					console.log("multiple options:");
+					console.log(result);
 				}
 			},
             error: function (error) {
