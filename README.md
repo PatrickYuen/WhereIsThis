@@ -1,14 +1,14 @@
 # WhereIsThis
+Author: Patrick Yuen
 
-Make a quick extension that shows shit on google maps when highlighted
+Make a quick extension that shows highlighted addresses on google maps when highlighted
 
 Workflow:
-Highlight text
-rightclick for context menu and click on option
+1. Highlight text
+2. rightclick for context menu and click on option
+3. Popup should appear near cursor
+4. click anywhere else to get rid of the popup
 
-TODO:
-geocode selected text
-display popup next to cursor if response, 
-else display autocomplete results
+My exploration in google chrome extensions + google maps api
 
-If mouse out by 10px, then delete popup
+In Progress: Better Popup positioning and suggestions
