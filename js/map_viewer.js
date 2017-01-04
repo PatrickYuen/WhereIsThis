@@ -6,53 +6,105 @@ function renderMap() {
 
 //IFrame Listener
 window.addEventListener('message', function(e) {
-	// We only accept messages from ourselves
+	//TODO: We only accept messages from ourselves
 	
 	//Hacky: Wait for gmaps to load
 	while(!gmapsLoaded) {}
+	
+	var mapDOM = document.getElementById('map_canvas');
 
-	$.ajax({
-            url: "https://maps.googleapis.com/maps/api/geocode/json",
-            type: "get",
-            headers: {
-				'Content-type': 'application/x-www-form-urlencoded',
-				'Access-Control-Allow-Headers': 'x-requested-with' //Cross Domain Access
-            },
-			data: {
-				"address": e.data.selectedText,
-				"key": "AIzaSyBUK7HPpjNepqxtKAGLA0wPRk14NE0nZgQ"
-			},
-			cache: true,
-            success: function (result) {
-				if(result.results.length == 1) {
-					console.log("Found a place!");
+	var map = new google.maps.Map( mapDOM, {
+		mapTypeControlOptions: {
+			mapTypeIds: []
+		},
+		mapTypeId: 'roadmap'
+	});
 
-					var mapDOM = document.getElementById('map_canvas');
+    // Create the search box and link it to the UI element.
+    var input = document.getElementById('pac-input');
+    var searchBox = new google.maps.places.SearchBox(input);
+    map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+	// Bias the SearchBox results towards current map's viewport.
+	map.addListener('bounds_changed', function() {
+	  searchBox.setBounds(map.getBounds());
+	});
+
+	var markers = [];
+	
+	// Listen for the event fired when the user selects a prediction and retrieve
+	// more details for that place.
+	searchBox.addListener('places_changed', function() {
+
+		var places = searchBox.getPlaces();
+
+		if (places.length == 0) {
+			return;
+		}
+
+		// Clear out the old markers.
+		markers.forEach(function(marker) {
+			marker.setMap(null);
+		});
+		markers = [];
+
+		// For each place, get the icon, name and location.
+		var bounds = new google.maps.LatLngBounds();
 		
-					var currPos = result.results[0].geometry.location;
-					var map = new google.maps.Map( mapDOM , {
-					  zoom: 15,
-					  center: currPos
-					});
-					var marker = new google.maps.Marker({
-					  position: currPos,
-					  map: map
-					});
-					
-					//Set window size
-					mapDOM.style.width = "80vh";
-					mapDOM.style.height = "80vw";
-					
-					mapDOM.style.position = "absolute";
-				} else {
-					console.log("multiple options:");
-					console.log(result);
-				}
-			},
-            error: function (error) {
-				console.log('Error');
-                console.log(error.responseText);
-            }
+		var place = places[0]; //Do the first one every time
+
+		if (!place.geometry) {
+			console.log("Returned place contains no geometry");
+			return;
+		}	
+		
+		var icon = {
+			url: place.icon,
+			size: new google.maps.Size(71, 71),
+			origin: new google.maps.Point(0, 0),
+			anchor: new google.maps.Point(17, 34),
+			scaledSize: new google.maps.Size(25, 25)
+		};
+
+		// Create a marker for each place.
+		markers.push(new google.maps.Marker({
+			map: map,
+			icon: icon,
+			title: place.name,
+			position: place.geometry.location
+		}));
+
+		if (place.geometry.viewport) {
+			// Only geocodes have viewport.
+			bounds.union(place.geometry.viewport);
+		} else {
+			bounds.extend(place.geometry.location);
+		}
+
+		map.fitBounds(bounds);
+		
+		//Set the address
+		input.value = place.formatted_address;
+		
+		//Make visible: After everything is done
+		document.getElementById('map_container').style.visibility = "visible";		
+	});
+	
+	//Trigger SearchBox
+	var request = {
+        query: e.data.selectedText
+    };
+	
+    new google.maps.places.PlacesService(map).textSearch(request, function(places) {
+        //set the places-property of the SearchBox
+        //places_changed will be triggered automatically
+        searchBox.set('places', places || [])
     });
+	
+	//Set window size
+	mapDOM.style.width = "90%";
+	mapDOM.style.height = "90%";
+	
+	mapDOM.style.position = "absolute";
 });
 

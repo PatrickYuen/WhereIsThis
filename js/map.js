@@ -52,6 +52,7 @@ function onRenderMap(selectedText) {
      mapViewerDOM.parentNode.removeChild(mapViewerDOM);
   }
 
+  //TODO: Make Nicer
   mapViewerDOM = document.createElement('iframe');
   mapViewerDOM.setAttribute('id', UNIQUE_MAP_VIEWER_ID);
   mapViewerDOM.setAttribute('src', chrome.extension.getURL('map_viewer.html'));
@@ -61,9 +62,17 @@ function onRenderMap(selectedText) {
   mapViewerDOM.setAttribute('style', 'position: absolute;' +
 							'top: ' + mouseY + 'px;' +
 							'left: ' + mouseX + 'px;' +
-							'width: 40vh;' +
-							'height: 40vh;' +
-							'overflow: hidden; z-index: 99999');
+							'width: 50vh;' +
+							'height: 50vh;' +
+							'overflow: hidden; z-index: 99999;');
+							
+	//Hide the scrollbar on hidden
+	/*var customStyles = document.createElement('style'); 
+	customStyles.appendChild(document.createTextNode(
+	   'iframe::-webkit-scrollbar { width: 0 !important }'
+	));
+	
+	document.getElementsByTagName('head')[0].appendChild(customStyles); */
 
   //Message Posting to IFrame
   mapViewerDOM.onload = function(e) {

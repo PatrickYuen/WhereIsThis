@@ -25,7 +25,12 @@
 	"persistent": false
   },
   "content_security_policy":"script-src 'self' https://maps.googleapis.com; object-src 'self'",
-  "web_accessible_resources": ["js/jquery-3.1.1.min.js", "map_viewer.html", "js/map_viewer.js"],
+  "web_accessible_resources": [
+	"js/jquery-3.1.1.min.js",
+	"map_viewer.html",
+	"js/map_viewer.js",
+	"map_style.css"
+  ],
   "permissions": [ 
     "activeTab",
 	"geolocation",

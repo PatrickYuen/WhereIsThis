@@ -1,17 +1,22 @@
 <!DOCTYPE html> 
 <html>
 <head>
+	<link rel="stylesheet" type="text/css" href="map_style.css">
+
   	<!-- Google Maps -->
 	<script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBUK7HPpjNepqxtKAGLA0wPRk14NE0nZgQ&callback=renderMap">
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBUK7HPpjNepqxtKAGLA0wPRk14NE0nZgQ&libraries=places&callback=renderMap">
     </script>
 	
 	<!-- Using JQuery -->
-	<script src="js/jquery-3.1.1.min.js"></script>
+	<script src="js/jquery-3.1.1.min.js" defer></script>
 	
-	<script type="text/javascript" src="js/map_viewer.js"></script>
+	<script type="text/javascript" src="js/map_viewer.js" defer></script>
 </head>
 <body>
-  <div id="map_canvas"></div>
+	<div id="map_container">
+		<input id="pac-input" class="controls" type="text" placeholder="Search Box">
+		<div id="map_canvas"></div>
+	</div>
 </body>
 </html>

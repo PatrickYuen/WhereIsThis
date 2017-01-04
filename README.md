@@ -11,4 +11,9 @@ Workflow:
 
 My exploration in google chrome extensions + google maps api
 
-In Progress: Better Popup positioning and suggestions
+In Progress: 
+Better Popup positioning and style //Bug with scrollbar during hidden
+
+tooltips with interesting info
+
+directions from me button
